@@ -1,9 +1,9 @@
 import React, { useState, lazy, Suspense } from 'react';
 
-const UploadMain = lazy(() => import('./pages/UploadMain'));
-const AnalysisMain = lazy(() => import('./pages/AnalysisMain'));
-const BudgetMain = lazy(() => import('./pages/BudgetMain'));
-const CardMain = lazy(() => import('./pages/CardMain'));
+const UploadMain = lazy(() => import('./pages/Upload/Main'));
+const AnalysisMain = lazy(() => import('./pages/Analysis/Main'));
+const BudgetMain = lazy(() => import('./pages/Budget/Main'));
+const CardMain = lazy(() => import('./pages/Card/Main'));
 
 export default function AffordApp() {
   const [activeTab, setActiveTab] = useState('upload');
