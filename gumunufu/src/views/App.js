@@ -3,10 +3,22 @@ import React, { useState, lazy, Suspense } from 'react';
 const UploadMain = lazy(() => import('./pages/Upload/Main'));
 const AnalysisMain = lazy(() => import('./pages/Analysis/Main'));
 const BudgetMain = lazy(() => import('./pages/Budget/Main'));
-const CardMain = lazy(() => import('./pages/Card/Main'));
+const CardOptimizer = lazy(() => import('./pages/CardOptimizer/CardOptimizer'));
 
 export default function AffordApp() {
   const [activeTab, setActiveTab] = useState('upload');
+  const [transactions, setTransactions] = useState([]);
+  const [creditCards, setCreditCards] = useState([]);
+
+  const handleLoadSampleData = ({ sampleTransactions, sampleCards }) => {
+    setTransactions(sampleTransactions);
+    setCreditCards(sampleCards);
+  };
+
+  const handleClearData = () => {
+    setTransactions([]);
+    setCreditCards([]);
+  };
 
   function getTabClass(tabName) {
     return tabName === activeTab ? 'tab active' : 'tab';
@@ -49,11 +61,23 @@ export default function AffordApp() {
       </div>
 
       <div className="main-area">
-        <Suspense fallback={<div className="card">Loading…</div>}>
-          {activeTab === 'upload' && <UploadMain />}
+        <Suspense fallback={<div className="card">Loading...</div>}>
+          {activeTab === 'upload' && (
+            <UploadMain
+              transactions={transactions}
+              creditCards={creditCards}
+              onLoadSampleData={handleLoadSampleData}
+              onClearData={handleClearData}
+            />
+          )}
           {activeTab === 'analysis' && <AnalysisMain />}
           {activeTab === 'budget' && <BudgetMain />}
-          {activeTab === 'card' && <CardMain />}
+          {activeTab === 'card' && (
+            <CardOptimizer
+              transactions={transactions}
+              creditCards={creditCards}
+            />
+          )}
         </Suspense>
       </div>
 
