@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense } from 'react';
 
 const UploadMain = lazy(() => import('./pages/UploadMain'));
-const AnalysisMain = lazy(() => import('./pages/AnalysisMain'));
+const AnalysisMain = lazy(() => import('./pages/analysis/AnalysisMain'));
 const BudgetMain = lazy(() => import('./pages/BudgetMain'));
 const CardOptimizer = lazy(() => import('./pages/CardOptimizer/CardOptimizer'));
 

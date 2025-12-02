@@ -1,0 +1,33 @@
+date,name,amount,category,necessity_score
+2025-10-01,Whole Foods Market,127.45,Groceries,0.89
+2025-10-02,Shell Gas Station,52.30,Gas,0.76
+2025-10-03,Starbucks,6.75,Dining,0.34
+2025-10-04,Amazon.com,89.99,Shopping,0.42
+2025-10-05,Target,156.23,Shopping,0.58
+2025-10-06,Netflix Subscription,15.99,Entertainment,0.45
+2025-10-07,Chipotle Mexican Grill,14.50,Dining,0.38
+2025-10-08,CVS Pharmacy,34.20,Groceries,0.82
+2025-10-09,Designer Boutique,450.00,Shopping,0.12
+2025-10-10,Electric Company,98.50,Utilities,0.95
+2025-10-11,Planet Fitness,22.99,Fitness,0.65
+2025-10-12,Trader Joes,78.34,Groceries,0.87
+2025-10-13,Uber Ride,23.50,Travel,0.52
+2025-10-14,Insurance Premium,175.00,Insurance,0.98
+2025-10-15,Premium Coffee Shop,18.75,Dining,0.22
+2025-10-16,Costco Wholesale,245.67,Groceries,0.91
+2025-10-17,Best Buy,329.99,Electronics,0.35
+2025-10-18,McDonald's,12.45,Dining,0.28
+2025-10-19,Home Depot,87.23,Home Improvement,0.68
+2025-10-20,Spotify Premium,9.99,Entertainment,0.48
+2025-10-21,Chevron Gas Station,48.90,Gas,0.74
+2025-10-22,Apple Store,1299.00,Electronics,0.15
+2025-10-23,Local Restaurant,67.80,Dining,0.55
+2025-10-24,Water Bill,45.00,Utilities,0.96
+2025-10-25,Bookstore,23.50,Education,0.60
+2025-10-26,Pet Store,89.45,Pets,0.70
+2025-10-27,Pharmacy,28.30,Healthcare,0.85
+2025-10-28,Concert Tickets,125.00,Entertainment,0.30
+2025-10-29,Grocery Store,92.15,Groceries,0.88
+2025-10-30,Gym Membership,45.00,Fitness,0.72
+2025-10-31,Halloween Costume Store,35.99,Shopping,0.25
+

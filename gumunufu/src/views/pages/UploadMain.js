@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { sampleTransactions, sampleCards } from './sampleData';
+import { parseTransactionCSV } from '../services/csvParser';
+import { saveTransactionsToSupabase, fetchTransactionsFromSupabase, clearAllTransactions } from '../services/transactionService';
 
 export default function UploadMain({
   transactions = [],
@@ -25,6 +27,51 @@ export default function UploadMain({
     []
   );
 
+  const handleTransactionUpload = useCallback(
+    async (event) => {
+      const file = event?.target?.files?.[0];
+      if (!file) return;
+
+      if (isLoading) return;
+      setIsLoading(true);
+
+      try {
+        // Parse CSV file
+        const transactions = await parseTransactionCSV(file);
+        
+        if (transactions.length === 0) {
+          showStatus('No valid transactions found in CSV file.');
+          setIsLoading(false);
+          return;
+        }
+
+        // Save to Supabase
+        const result = await saveTransactionsToSupabase(transactions);
+        
+        if (result.success) {
+          // Fetch updated transactions from Supabase
+          const fetchResult = await fetchTransactionsFromSupabase();
+          if (fetchResult.success) {
+            onLoadSampleData({ sampleTransactions: fetchResult.transactions, sampleCards });
+          }
+          showStatus(`Successfully uploaded ${transactions.length} transactions to Supabase.`);
+        } else {
+          showStatus(`Error uploading: ${result.error}`);
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        showStatus(`Error processing file: ${error.message}`);
+      } finally {
+        setIsLoading(false);
+        // Reset file input
+        if (event?.target) {
+          event.target.value = '';
+        }
+      }
+    },
+    [isLoading, onLoadSampleData, showStatus]
+  );
+
   const handlePlaceholderUpload = useCallback(
     (event, label) => {
       if (event?.target) {
@@ -47,10 +94,27 @@ export default function UploadMain({
     setIsLoading(false);
   }, [isLoading, onLoadSampleData, showStatus]);
 
-  const handleClearData = useCallback(() => {
-    onClearData();
-    showStatus('Cleared uploaded data.');
-  }, [onClearData, showStatus]);
+  const handleClearData = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      // Clear from Supabase
+      const result = await clearAllTransactions();
+      
+      if (result.success) {
+        onClearData();
+        showStatus('Cleared all data from Supabase.');
+      } else {
+        showStatus(`Error clearing data: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Clear error:', error);
+      showStatus(`Error clearing data: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, onClearData, showStatus]);
 
   useEffect(() => {
     return () => {
@@ -71,15 +135,18 @@ export default function UploadMain({
             </p>
           </div>
         </div>
-        <label className="upload-control">
+        <label className="upload-control" style={{ cursor: isLoading ? 'wait' : 'pointer', opacity: isLoading ? 0.6 : 1 }}>
           <input
             type="file"
             accept=".csv"
-            onChange={(event) => handlePlaceholderUpload(event, 'Transaction')}
+            onChange={handleTransactionUpload}
+            disabled={isLoading}
             style={{ display: 'none' }}
           />
           <div className="upload-icon">↑</div>
-          <p className="upload-title">Click to upload or drag and drop</p>
+          <p className="upload-title">
+            {isLoading ? 'Processing...' : 'Click to upload or drag and drop'}
+          </p>
           <p className="upload-subtext">CSV files only</p>
         </label>
 
@@ -144,13 +211,14 @@ export default function UploadMain({
             type="button"
             className="sample-button"
             onClick={handleClearData}
+            disabled={isLoading}
             style={{
               background: 'rgba(15,23,42,0.08)',
               color: '#0f172a',
               boxShadow: 'none',
             }}
           >
-            Clear Data
+            {isLoading ? 'Clearing...' : 'Clear Data'}
           </button>
         </div>
 
